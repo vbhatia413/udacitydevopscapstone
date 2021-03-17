@@ -5,7 +5,7 @@
 - name: "install dependencies including kubernetes cluster."
   become: true
   yum:
-    name: ["git", "docker"]
+    name: ["git", "docker", "python3"]
     state: latest
     update_cache: yes
 #- name: Git clone
@@ -14,6 +14,10 @@
  # shell: sudo usermod -aG docker ec2-user && newgrp docker
 - name: Start Docker service
   shell: sudo service docker start
+- name: Make install
+  shell: make install
+  args:
+    chdir: ~/udacitydevopscapstone
 - name: Run Docker build
   shell: sh run_docker.sh
   args:
