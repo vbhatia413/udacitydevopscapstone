@@ -11,9 +11,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install tar
-          command: yum -y install tar gzip
-      - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
@@ -54,7 +51,6 @@ jobs:
           name: Configure server
           command: |
             INSTANCE_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/instance_ip_${CIRCLE_WORKFLOW_ID})
-            INSTANCE_IP="54.201.107.203"
             echo ${INSTANCE_IP}
             cd .circleci/ansible/
             ls
@@ -104,6 +100,8 @@ workflows:
   default:
     jobs:
       - build
+      - deploy-infrastructure:
+          context: VikasContext
       - configure-infrastructure:
           context: VikasContext
 
