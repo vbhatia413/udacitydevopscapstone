@@ -105,4 +105,5 @@ workflows:
           context: VikasContext
       - configure-infrastructure:
           context: VikasContext
+          requires: [deploy-infrastructure]
 
