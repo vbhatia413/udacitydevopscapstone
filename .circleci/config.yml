@@ -104,4 +104,6 @@ workflows:
   default:
     jobs:
       - build
-      - configure-infrastructure
+      - configure-infrastructure:
+          context: VikasContext
+
