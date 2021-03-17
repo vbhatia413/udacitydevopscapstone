@@ -9,48 +9,32 @@
     state: latest
     update_cache: yes
 - name: Add ec2-user to docker group
-  ansible.builtin.shell:
-    cmd: git clone https://github.com/vbhatia413/udacitydevopscapstone.git
-    chdir: ~
+  shell: git clone https://github.com/vbhatia413/udacitydevopscapstone.git
 - name: Add ec2-user to docker group
-  ansible.builtin.shell:
-    cmd: sudo usermod -aG docker ec2-user && newgrp docker
-    chdir: ~
+  shell: sudo usermod -aG docker ec2-user && newgrp docker
 - name: Start Docker service
-  ansible.builtin.shell:
-    cmd: sudo service docker start
-    chdir: ~
+  shell: sudo service docker start
 - name: Run Docker build
-  ansible.builtin.shell:
-    cmd: sh run_docker.sh
+  shell: sh run_docker.sh
+  args:
     chdir: ~/udacitydevopscapstone
 - name: Upload Docker image to central repo on Docker Hub
-  ansible.builtin.shell:
-    cmd: sh upload_docker.sh $DOCKERHUB_PASSWORD
+  shell: sh upload_docker.sh $DOCKERHUB_PASSWORD
+  args:
     chdir: ~/udacitydevopscapstone
 - name: Download kubectl
-  ansible.builtin.shell:
-    cmd: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-    chdir: ~
+  shell: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 - name: Install kubectl
-  ansible.builtin.shell:
-    cmd: sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-    chdir: ~
+  shell: sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 - name: Downlood minikube
-  ansible.builtin.shell:
-    cmd: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
-    chdir: ~
+  shell: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
 - name: Install minikube
-  ansible.builtin.shell:
-    cmd: sudo rpm -ivh --force minikube-latest.x86_64.rpm
-    chdir: ~
+  shell: sudo rpm -ivh --force minikube-latest.x86_64.rpm
 - name: Start minikube cluster
-  ansible.builtin.shell:
-    cmd: minikube start --driver=docke
-    chdir: ~
+  shell: minikube start --driver=docke
 - name: Run Docker build
-  ansible.builtin.shell:
-    cmd: sh run_kubernetes.sh
+  shell: sh run_kubernetes.sh/udacitydevopscapstone
+  args:
     chdir: ~/udacitydevopscapstone
 
     
