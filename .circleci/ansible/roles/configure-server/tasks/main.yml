@@ -2,11 +2,6 @@
   become: yes
   yum:
     update_cache: yes
-
-- name: "upgrade packages."
-  become: true
-  yum:
-    upgrade: "yes"
 - name: "install dependencies including kubernetes cluster."
   become: true
   yum:
