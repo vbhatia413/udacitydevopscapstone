@@ -58,6 +58,7 @@ jobs:
             echo ${INSTANCE_IP}
             cd .circleci/ansible/
             ls
+            echo "[web]" > ./inventory.txt
             echo ${INSTANCE_IP} >> ./inventory.txt
             cat ./inventory.txt
             export ANSIBLE_HOST_KEY_CHECKING=false
