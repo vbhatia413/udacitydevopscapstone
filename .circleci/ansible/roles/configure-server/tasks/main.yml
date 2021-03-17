@@ -15,12 +15,24 @@
     update_cache: yes
 - name: Add ec2-user to docker group
   ansible.builtin.shell:
+    cmd: git clone https://github.com/vbhatia413/udacitydevopscapstone.git
+    chdir: ~
+- name: Add ec2-user to docker group
+  ansible.builtin.shell:
     cmd: sudo usermod -aG docker ec2-user && newgrp docker
     chdir: ~
-- name: Start docker service
+- name: Start Docker service
   ansible.builtin.shell:
-    cmd: sudo docker service start
+    cmd: sudo service docker start
     chdir: ~
+- name: Run Docker build
+  ansible.builtin.shell:
+    cmd: sh run_docker.sh
+    chdir: ~/udacitydevopscapstone
+- name: Upload Docker image to central repo on Docker Hub
+  ansible.builtin.shell:
+    cmd: sh upload_docker.sh $DOCKERHUB_PASSWORD
+    chdir: ~/udacitydevopscapstone
 - name: Download kubectl
   ansible.builtin.shell:
     cmd: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -41,3 +53,9 @@
   ansible.builtin.shell:
     cmd: minikube start --driver=docke
     chdir: ~
+- name: Run Docker build
+  ansible.builtin.shell:
+    cmd: sh run_kubernetes.sh
+    chdir: ~/udacitydevopscapstone
+
+    

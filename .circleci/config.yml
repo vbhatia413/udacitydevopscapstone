@@ -54,6 +54,7 @@ jobs:
           name: Configure server
           command: |
             INSTANCE_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/instance_ip_${CIRCLE_WORKFLOW_ID})
+            INSTANCE_IP="54.201.107.203"
             echo ${INSTANCE_IP}
             cd .circleci/ansible/
             ls
@@ -98,35 +99,8 @@ jobs:
           command: |
             . venv/bin/activate
             make lint 
-  dockerupload:
-    docker:
-    # Use the same Docker base as the project
-      - image: python:3.7.3-stretch
-
-    steps:
-      - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run:
-          name: Run and upload docker
-          command: |
-              yum -y install docker
-              service docker start
-              sh run_docker.sh
-              sh upload_docker.sh ${DOCKERHUB_PASSWORD}
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
 workflows:
   default:
     jobs:
-      - build:
-          context: VikasContext
-      - dockerupload
+      - build
+      - configure-infrastructure
