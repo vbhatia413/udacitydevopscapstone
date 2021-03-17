@@ -1,4 +1,4 @@
-- name: "update apt packages."
+- name: "update yum packages."
   become: yes
   yum:
     update_cache: yes
@@ -7,10 +7,37 @@
   become: true
   yum:
     upgrade: "yes"
-
-- name: "install dependencies."
+- name: "install dependencies including kubernetes cluster."
   become: true
   yum:
-    name: ["nodejs", "npm"]
+    name: ["git", "docker"]
     state: latest
     update_cache: yes
+- name: Add ec2-user to docker group
+  ansible.builtin.shell:
+    cmd: sudo usermod -aG docker ec2-user && newgrp docker
+    chdir: ~
+- name: Start docker service
+  ansible.builtin.shell:
+    cmd: sudo docker service start
+    chdir: ~
+- name: Download kubectl
+  ansible.builtin.shell:
+    cmd: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    chdir: ~
+- name: Install kubectl
+  ansible.builtin.shell:
+    cmd: sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    chdir: ~
+- name: Downlood minikube
+  ansible.builtin.shell:
+    cmd: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+    chdir: ~
+- name: Install minikube
+  ansible.builtin.shell:
+    cmd: sudo rpm -ivh --force minikube-latest.x86_64.rpm
+    chdir: ~
+- name: Start minikube cluster
+  ansible.builtin.shell:
+    cmd: minikube start --driver=docke
+    chdir: ~

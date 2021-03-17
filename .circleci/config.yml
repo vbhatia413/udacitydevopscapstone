@@ -20,12 +20,12 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --tags project=vikasudacityproject \
               --stack-name "vikas-udacity-backend-${CIRCLE_WORKFLOW_ID}" \
-              --parameter-overrides ID="green"  
+              --parameter-overrides COLOR="${COLORCODE}"  
       - run:
           name: Add back-end ip to ansible inventory, use memstash
           command: |
             INSTANCE_IP=$(aws ec2 describe-instances \
-            --filters 'Name=tag:Name,Values=backend-green' \
+            --filters 'Name=tag:Name,Values=backend-capstone-${COLORCODE}' \
             --query "Reservations[*].Instances[*].PublicDnsName" \
             --output text)
             echo ${INSTANCE_IP}
@@ -98,8 +98,35 @@ jobs:
           command: |
             . venv/bin/activate
             make lint 
+  dockerupload:
+    docker:
+    # Use the same Docker base as the project
+      - image: python:3.7.3-stretch
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: Run and upload docker
+          command: |
+              sh run_docker.sh
+              sh upload_docker.sh ${DOCKERHUB_PASSWORD}
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
 workflows:
   default:
     jobs:
       - build:
           context: VikasContext
+      - dockerupload

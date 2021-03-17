@@ -9,7 +9,7 @@ dockerpath=vvab13/apitest
 
 # Step 2:  
 # Authenticate & tag
-docker login --username vvab13
+docker login --username vvab13 --password $1
 docker tag apitest $dockerpath
 echo "Docker ID and Image: $dockerpath"
 
