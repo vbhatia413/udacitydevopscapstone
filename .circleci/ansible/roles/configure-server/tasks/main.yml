@@ -8,7 +8,7 @@
     name: ["git", "docker"]
     state: latest
     update_cache: yes
-- name: Add ec2-user to docker group
+- name: Git clone
   shell: git clone https://github.com/vbhatia413/udacitydevopscapstone.git
 - name: Add ec2-user to docker group
   shell: sudo usermod -aG docker ec2-user && newgrp docker
