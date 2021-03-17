@@ -22,8 +22,8 @@ jobs:
           name: Add back-end ip to ansible inventory, use memstash
           command: |
             INSTANCE_IP=$(aws ec2 describe-instances \
-            --filters 'Name=tag:Name,Values=backend-capstone-${COLORCODE}' \
-            --query "Reservations[*].Instances[*].PublicDnsName" \
+            --filters 'Name=tag:Name,Values=backend-capstone-BLUE' \
+            --query "Reservations[*].Instances[*].PublicIpAddress" \
             --output text)
             echo ${INSTANCE_IP}
             curl -H "Content-Type: text/plain" \
