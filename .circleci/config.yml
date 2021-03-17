@@ -103,8 +103,6 @@ jobs:
     # Use the same Docker base as the project
       - image: python:3.7.3-stretch
 
-    working_directory: ~/repo
-
     steps:
       - checkout
 
@@ -118,7 +116,6 @@ jobs:
       - run:
           name: Run and upload docker
           command: |
-              cd ~/repo/udacitydevopscapstone
               sh run_docker.sh
               sh upload_docker.sh ${DOCKERHUB_PASSWORD}
       - save_cache:
