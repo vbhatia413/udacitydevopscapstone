@@ -43,3 +43,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub backend-${ID}-${COLOR}
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 24

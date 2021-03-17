@@ -2,42 +2,42 @@
   become: yes
   yum:
     update_cache: yes
-- name: "install dependencies including kubernetes cluster."
-  become: true
-  yum:
-    name: ["git", "docker", "python3"]
-    state: latest
-    update_cache: yes
-#- name: Git clone
-  #shell: git clone https://github.com/vbhatia413/udacitydevopscapstone.git
+# - name: "install dependencies including kubernetes cluster."
+#   become: true
+#   yum:
+#     name: ["git", "docker", "python3"]
+#     state: latest
+#     update_cache: yes
+# - name: Git clone
+#   shell: git clone https://github.com/vbhatia413/udacitydevopscapstone.git
 #- name: Add ec2-user to docker group
  # shell: sudo usermod -aG docker ec2-user && newgrp docker
-- name: Start Docker service
-  shell: sudo service docker start
-- name: Make install
-  shell: make install
-  args:
-    chdir: ~/udacitydevopscapstone
-- name: Run Docker build
-  shell: sh run_docker.sh
-  args:
-    chdir: ~/udacitydevopscapstone
-- name: Upload Docker image to central repo on Docker Hub
-  shell: sh upload_docker.sh $DOCKERHUB_PASSWORD
-  args:
-    chdir: ~/udacitydevopscapstone
-- name: Download kubectl
-  shell: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-- name: Install kubectl
-  shell: sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-- name: Downlood minikube
-  shell: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
-- name: Install minikube
-  shell: sudo rpm -ivh --force minikube-latest.x86_64.rpm
+# - name: Start Docker service
+#   shell: sudo service docker start
+# - name: Make install
+#   shell: make install
+#   args:
+#     chdir: ~/udacitydevopscapstone
+# - name: Run Docker build
+#   shell: sh run_docker.sh
+#   args:
+#     chdir: ~/udacitydevopscapstone
+# - name: Upload Docker image to central repo on Docker Hub
+#   shell: sh upload_docker.sh $DOCKERHUB_PASSWORD
+#   args:
+#     chdir: ~/udacitydevopscapstone
+# - name: Download kubectl
+#   shell: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+# - name: Install kubectl
+#   shell: sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+# - name: Downlood minikube
+#   shell: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+# - name: Install minikube
+#   shell: sudo rpm -ivh --force minikube-latest.x86_64.rpm
 - name: Start minikube cluster
   shell: minikube start --driver=docke
 - name: Run Docker build
-  shell: sh run_kubernetes.sh/udacitydevopscapstone
+  shell: sh run_kubernetes.sh
   args:
     chdir: ~/udacitydevopscapstone
 
