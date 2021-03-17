@@ -35,7 +35,7 @@
 # - name: Install minikube
 #   shell: sudo rpm -ivh --force minikube-latest.x86_64.rpm
 - name: Start minikube cluster
-  shell: minikube start --driver=docke
+  shell: minikube start --driver=docker
 - name: Run Docker build
   shell: sh run_kubernetes.sh
   args:
